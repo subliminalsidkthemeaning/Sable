@@ -1,3 +1,5 @@
+<p align="center"><img src="https://github.com/subliminalsidkthemeaning/HEX/releases/latest/download/hex.png" width="128" height="128" alt="HEX" /></p>
+
 # HEX 0.2.0
 
 A native Windows x64 music player built with Rust and Slint, adapted from featherplay. No Electron, browser shell, subscription, tracking SDK or personal server.
