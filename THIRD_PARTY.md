@@ -1,7 +1,6 @@
-# HEX distribution note
+# Sable distribution note
 
-The dependency inventory and full upstream license texts below are retained from the pinned featherplay foundation. Internal workspace crate names remain jolt-* for compatibility. HEX stores pinned, hash-verified compatibility helpers under %LOCALAPPDATA%\JOLT\sidecars and obtains them from official upstream releases (Deno may use dl.deno.land). The upstream website mirror described below is not used by HEX. Application updates use the separate HEX release page; automatic installation requires HEX-controlled signing keys. See NOTICE.md for attribution and Microsoft runtime packaging.
-
+The dependency inventory and full upstream license texts below are retained from the pinned featherplay foundation. Sable's internal workspace crates use sable-* names. Pinned, hash-verified compatibility helpers remain under %LOCALAPPDATA%\JOLT\sidecars for upgrade compatibility and come from official upstream releases. The historical upstream website mirror described below is not used by Sable. Application updates use the official Sable repository and require configured Sable-controlled signing keys for automatic installation. See NOTICE.md for attribution and Microsoft runtime packaging.
 # Third-party notices
 
 featherplay is MIT-licensed (see [LICENSE](LICENSE)). It is built from the Rust crates
