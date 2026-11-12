@@ -1,45 +1,25 @@
-# HEX 0.2.0 verification
+# Sable 0.3.0 verification
 
-The existing JOLT 0.1.2 code and profiles were backed up before changes, with another profile backup before the installed upgrade. The native Rust/Slint playback engine and single-process design are retained. Public artifacts exclude private source, logs, profiles, sessions, credentials and backups.
+The native Rust + Slint player was updated in place. The streaming engine, saved library, playlists, replayable queue history, synchronized lyrics, Windows controls and optional Discord IPC architecture are retained.
 
-## Build and regression checks
+Validated on 2026-11-12:
 
-- Formatting and strict workspace Clippy with all targets were run; the final logs are retained privately.
-- The full CI-profile unit/integration run covered 1,552 cases: 1,551 passed and one expected-text fixture still named the previous product. The corrected fixture then passed in a 235-case targeted run, with all 235 passing. The full run skipped 86 configuration-gated/ignored cases; those are not claimed as passes.
-- The additional manual-lyrics regression passed, confirming that scrolling holds position across lyric advancement and the visible return control restores centering. Its five-case run also passed centered forward/backward seeks and all three installer identity checks. This adds one unique regression case to the 1,552-case full run.
-- Workspace documentation tests passed (all 11 crates contain zero runnable doctests).
-- The audited Windows x64 release compilation passed with no perf-harness or development-cookie feature. Executable product name and version are HEX 0.2.0.
+- Formatting and strict workspace/all-targets Clippy passed. The 1,581 primary unit/integration checks and 22 rendering/memory checks passed; four installer contracts were rechecked after installer safety changes. Doctests passed.
+- Optimized Windows QA and feature-free public builds succeeded. The public executable SHA256 is F2D77961F594A69311D90A64EA6B4A978A4A9F1FCE0CA002D7793D009401C032.
+- Isolated real muted streaming passed eight visible progress checks across navigation, seeking, pause/resume, skipping, previous-song replay and automatic advancement. No sampled visual position exceeded the authoritative audio position. The prior freeze came from regular audio-clock updates not reaching the visual clock until a separate player-state event; the visual clock now consumes those real samples directly.
+- Artwork ambience followed playback position, froze when paused and remained static in Performance Mode. It is restrained ambient motion, not beat detection. No additional animation timer, audio-analysis process or server was added.
+- Product-owned live-source renderer captures were inspected at 100%, 125% and 150%, including 760×600, compact, normal and 1920×1080 layouts. Native owned-window checks passed minimize, maximize, restore and the Snap maximize hit test. Physical dragging/Snap-flyout and installer artwork at changed desktop scaling remain manual checks; renderer scaling is not a substitute for those desktop checks.
+- Official supplied Sable assets were used without redesign. Eleven PNG variants, all 13 ICO entries and the exact 1024×1024 Discord artwork were checked against supplied assets. Obsolete branding assets are excluded from new packages.
+- A uniquely isolated installer/uninstaller passed owned legacy executable/shortcut cleanup, preservation of unrelated shortcuts/applications/files, unchanged saved-profile bytes, owned startup migration and preservation of unrelated startup values. The real installation and startup preferences were unchanged by isolated testing. The packaged in-place upgrade also passed: the existing installation directory was reused, library fields and settings bytes were preserved, the saved queue was retained, shortcuts and startup preference were checked, and a recoverable installation/profile backup was created. Portable streaming passed with development tools excluded from PATH; the required runtime DLLs loaded from the portable folder.
 
-Coverage includes legacy profile locations and settings migration, favorites and library refresh, authenticated-library behavior, queue timeline/replay, playlist source classifications, bottom-player/mini-player navigation, hover/focus behavior, conservative progress interpolation, seeks/pause/resume, real enhanced-LRC parsing and word highlighting, line/plain/unavailable lyric fallbacks, hidden lyric work, centered scrolling, Discord lifecycle/identity/link validation and update-channel trust boundaries. Real word timing is tested with explicitly labeled fixtures, never represented as a live provider result.
+Saved-data compatibility retains the original installer AppId, Windows identity, %APPDATA%\JOLT, %LOCALAPPDATA%\JOLT and Credential Manager service. Existing jolt-local playlist IDs remain recognized and are not rewritten. The local taste profile is separate from existing library/session schemas. All automated listening, recommendation experiments and feedback use isolated profiles.
 
-## Installer and saved data
+Explore retains local weighting, separate song neighborhoods, explicit feedback, bounded caches and genuine related-song candidates. A real anonymous five-case probe produced distinct R&B, rap, reggaeton, rock and mixed-interest results. This is evidence of working discovery requests and distinct candidates, not proof of universal recommendation accuracy. Reliable genres, acoustic features and a comprehensive artist-similarity graph are unavailable in the current catalog interface; those signals are not invented. Track availability remains subject to the music source.
 
-The isolated installer and uninstaller both returned exit 0. They replaced the old executable and preserved the test library byte for byte, including on uninstall. The QA identity and shortcuts were separate from the normal application. The production installer retains the previous AppId, AUMID, data folders and credential service. It recognizes the exact official 0.1.2 binary if uninstall registration is missing, cleans exact obsolete shortcuts/executable names and migrates an owned startup command.
+Explicit badges use confirmed source metadata only. Lyrics use genuine word timestamps when available, line timestamps otherwise, and honest plain/unavailable states. Live lyrics verification used genuine line timing; word timing and fallback behavior are also covered by deterministic tests.
 
-The actual installed JOLT 0.1.2 was upgraded successfully in place. The entire library and settings were byte-for-byte identical before and after. The saved queue, current index, radio, shuffle and repeat were unchanged; normal playback position was saved on close. An additional isolated silent-install test confirmed preservation of an existing desktop-shortcut choice and removal of only the QA shortcut on uninstall. Windows registered HEX 0.2.0 and the Start-menu shortcut became HEX. The old executable and old desktop/Start shortcut were removed.
+Discord retains Application ID 1570159402856751135, Listening type, real metadata/artwork/timestamps and no song/artwork click-through URLs. Get Sable activates only after its configured public installer passes verification. RPC lifecycle and payload behavior are covered by automated tests. No Discord client or second viewer was available for a new live acknowledgment, button visibility or browser-click check. The owner must rename the Developer Application to Sable and upload the supplied artwork under key sable; see DISCORD.md.
 
-## Artwork and DPI
+All 29 final performance workloads passed their sampling and applicable driver validation. See PERFORMANCE-0.3.0.md for the complete old/new measurements, visible-animation cost, instrumented-reference caveats and disconnected Discord limitation.
 
-All supplied kit hashes match. Thirteen PNG sizes and all seven ICO entries were checked. Full alpha scans of the master and icon variants confirm an opaque inner body; transparent corners and the original antialiased edge treatment are preserved. No logo was generated or redesigned. App screenshots were rendered and inspected at 100%, 125% and 150% scale, including centered lyrics. Small official icons are retained at their supplied dimensions.
-
-Inno Setup 7.1.1 compiled the transparent 147 × 147 small wizard art and 480 × 918 large art. Official current image areas are square 58/77/97 px for the small image at 100/125/150%, and 202 × 386 / 269 × 515 / 336 × 643 for the large image. Live interactive installer visual review at all three Windows display scales remains a manual check; native UI automation was unavailable. Application offscreen renders and successful silent installation do not substitute for that visual check.
-
-## Live playback and Discord
-
-Real streaming playback passed the measured scenarios in PERFORMANCE-0.2.0.md. Live synchronized lyrics were confirmed by an exact LRCLIB match in both performance modes. Four skips and four past-entry replays reached actual audio-start events. All sampled player process counts were one.
-
-Discord's existing local IPC architecture and Application ID 1570159402856751135 are retained. Download HEX is disabled until its public installer URL verifies. Public download and accepted activity-payload checks occur after release publication and are reported in the repository's current verification document. No second-viewer button click is claimed.
-
-Manual Developer Portal work remains: rename the application to HEX and upload the supplied 1024 × 1024 hex.png under asset key hex. The name is server-managed; keeping the existing Application ID preserves the integration. Song/art click-through URLs remain omitted. Ordinary activity privacy preferences are not changed.
-
-The installer is unsigned. Windows security and reputation protections are not bypassed. Automatic application installation remains gated on HEX-controlled signing keys; application updates currently use the official release page manually.
-
-## Publication verification, 11 November 2026
-
-HEX 0.2.0 was published at https://github.com/subliminalsidkthemeaning/HEX/releases/tag/v0.2.0 . An anonymous full download of https://github.com/subliminalsidkthemeaning/HEX/releases/latest/download/HEX-Setup-x64.exe returned HTTP 200 and matched the packaged SHA-256 **563ab1a23d9faea20c371c34ad53da1eb5edfb5c9ae61d80afef30185bac3642**. The app's live public-URL verification test passed separately (1/1).
-
-The public, uninstrumented executable received Discord's successful SET_ACTIVITY acknowledgment with matching nonce **2**. Its accepted outgoing payload includes exactly one button, **Download HEX**, pointing to that verified installer URL. Artwork, real title/artist, Listening type and timeline remain. No details_url, state_url, large_url or small_url song click-through fields are present. This verifies payload acceptance; a second-viewer click has not been performed. A separate live optimized-QA run also paused, resumed, skipped, exited through the real app callback, and received an acknowledged presence clear. The QA process exited on its own; its development instrumentation is absent from the public executable.
-
-Across the full run and corrected/added regression runs, 1,554 unique automated cases passed, including the new manual-lyrics case and live public-URL case. The full-run/targeted-run breakdown above is retained for transparency; the remaining 85 configuration-gated/ignored cases were not claimed as passes. Installer CLI checks and real streaming/Discord checks are additional evidence.
-
-Manual work remains the Developer Portal name/art update, a second-viewer button click, and live interactive installer artwork review at all three Windows display scales. Release binaries remain unchanged after publication; this repository document contains the post-publication checks.
+Application source is maintained in the private sable-source repository. The public Sable repository receives only explicit release/documentation/license/artwork allowlists; historical releases are preserved. Installers are unsigned. No leaderboard, public account backend or new automatic updater was implemented.
