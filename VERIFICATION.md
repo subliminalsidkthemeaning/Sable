@@ -23,3 +23,5 @@ Discord retains Application ID 1570159402856751135, Listening type, real metadat
 All 29 final performance workloads passed their sampling and applicable driver validation. See PERFORMANCE-0.3.0.md for the complete old/new measurements, visible-animation cost, instrumented-reference caveats and disconnected Discord limitation.
 
 Application source is maintained in the private sable-source repository. The public Sable repository receives only explicit release/documentation/license/artwork allowlists; historical releases are preserved. Installers are unsigned. No leaderboard, public account backend or new automatic updater was implemented.
+
+Post-publication: the installer and portable ZIP were anonymously downloaded and matched their packaged SHA256 checksums. The legacy HEX latest-download redirect serves the same new installer, and the historical 0.2.0 installer remains accessible. The public repository tree contains no application source or profile files. The application’s own Rust HTTPS/MZ verifier also accepted the published installer. Release artifact bytes were not changed by these post-publication documentation updates.
