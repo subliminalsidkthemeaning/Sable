@@ -1,30 +1,45 @@
-# HEX 0.2.0 measured performance
+# Sable 0.3.0 performance
 
-Measured 11 November 2026 on this Windows x64 machine with 12 logical processors. Each row uses 30 process samples over approximately 32.5 seconds, after playback starts and a further 15-second warmup. CPU is process CPU time divided by elapsed time and all 12 logical processors. Memory units are MiB (1,048,576 bytes). Process counts cover the player and its descendants; the ordinary Discord client and other existing applications are separate.
+Measured on Windows x64 with 12 logical processors, using the same actual Get Lucky recording (4D7u5KF7SP8), muted streaming, isolated guest profiles and matching saved metadata. Each result is 30 samples over approximately 31 seconds after audio-clock advancement and an eight-second warm-up. Builds, tests and other test players were stopped. Default client geometry was 1280×800; software rendering was retained.
 
-The old and new executables stream the same Get Lucky recording, muted, with matching quality and isolated copies of the same starting profile. Compilers and tests were finished during measurement. Two minimized samples that were opened during observation were discarded and repeated. No temporary browser or server was added for these measurements. First-run helper preparation is outside the steady-state sampling window.
+Memory figures are MiB (1,048,576 bytes). CPU is process CPU time normalized across all 12 logical processors, comparable to total machine CPU percentage. Working set is OS residency; private bytes are committed private memory. These are individual observations, not statistical guarantees or proof of an optimization.
 
-## Public, uninstrumented executables
+| Workload | HEX 0.2 WS | Sable WS | HEX private | Sable private | HEX CPU % | Sable CPU % |
+|---|---:|---:|---:|---:|---:|---:|
+| Tray hidden · Performance ON | 70.0 | 69.2 | 22.1 | 22.4 | 0.111 | 0.116 |
+| Tray hidden · Performance OFF | 59.8 | 60.2 | 21.6 | 22.8 | 0.137 | 0.133 |
+| Home visible · Performance ON | 69.3 | 67.2 | 29.7 | 27.7 | 0.100 | 0.120 |
+| Home visible / smooth progress · Performance OFF | 68.1 | 68.5 | 27.8 | 29.6 | 0.099 | 0.579 |
+| Synchronized lyrics · Performance ON | 75.4 | 75.9 | 36.2 | 36.5 | 0.218 | 0.137 |
+| Synchronized lyrics / smooth progress · Performance OFF | 80.4 | 80.9 | 41.0 | 40.8 | 0.472 | 0.999 |
+| Tray hidden / Discord enabled (client absent) | 60.6 | 60.2 | 22.3 | 22.3 | 0.108 | 0.120 |
+| Repeated skipping and history replay · Performance OFF | 73.6 | 72.1 | 33.7 | 32.2 | 0.748 | 1.018 |
+| Now Playing / breathing · Performance OFF | 70.6 | 69.7 | 30.7 | 29.9 | 0.319 | 0.897 |
+| Now Playing / static · Performance ON | 69.4 | 70.8 | 29.4 | 31.8 | 0.095 | 0.108 |
+| Windows minimized · Performance ON | 63.7 | 63.1 | 24.0 | 23.5 | 0.108 | 0.116 |
+| Windows minimized · Performance OFF | 65.6 | 64.1 | 25.5 | 23.5 | 0.108 | 0.091 |
 
-| Scenario | Working set MiB | Private bytes MiB | CPU, whole machine | Processes | Sample s |
-|---|---:|---:|---:|---:|---:|
-| JOLT 0.1.2, minimized, Performance ON, Discord OFF | 59.67 | 23.22 | 0.097% | 1–1 | 32.31 |
-| HEX, minimized, Performance ON, Discord OFF | 59.32 | 22.59 | 0.128% | 1–1 | 32.47 |
-| HEX, minimized, Performance OFF, Discord OFF | 58.24 | 19.74 | 0.133% | 1–1 | 32.33 |
-| HEX, minimized, Performance ON, Discord ON | 58.89 | 20.26 | 0.116% | 1–1 | 32.45 |
-| HEX, normal player visible, Performance ON | 67.18 | 27.78 | 0.128% | 1–1 | 32.60 |
-| HEX, normal player visible, Performance OFF; smooth progress | 70.24 | 30.44 | 0.136% | 1–1 | 32.53 |
+| Additional Sable workload | Working set MiB | Private MiB | CPU % |
+|---|---:|---:|---:|
+| Now Playing paused · Performance OFF | 71.0 | 30.6 | 0.000 |
+| Now Playing minimized · Performance OFF | 64.9 | 25.1 | 0.116 |
+| Explore paused / idle · Performance ON | 69.5 | 31.2 | 0.000 |
+| Explore playing · Performance OFF | 67.8 | 28.5 | 0.228 |
+| Explore minimized · Performance OFF | 64.8 | 24.6 | 0.103 |
 
-The comparable minimized Performance ON samples are 59.67 MiB working set / 23.22 MiB private bytes for JOLT and 59.32 / 22.59 MiB for HEX. Observed CPU was 0.097% and 0.128%, respectively. These are single observational samples on a live desktop, with network and cache variability; they do not establish a statistically significant optimization. The earlier Task Manager figure of about 39.7 MB was a separate observation and is not substituted for these measurements.
+Every sampling window observed one application process. Counts were sampled once per second and do not rule out short-lived existing resolver fallbacks between samples. No permanent browser, bot or server was added.
 
-## Optimized QA build with development instrumentation
+Visible smooth progress and breathing have a measurable CPU cost: Home increased by approximately 0.48 percentage points and full Now Playing by 0.58 points in these runs. Minimized playback remained near 0.1% total CPU. Paused cases recorded no CPU-counter increase at the available counter resolution; this does not guarantee zero CPU usage. Background working set with Performance Mode OFF was 59.8 MiB for the public 0.2 release and 60.2 MiB for Sable under these matched conditions.
 
-| Scenario | Working set MiB | Private bytes MiB | CPU, whole machine | Processes | Sample s |
-|---|---:|---:|---:|---:|---:|
-| HEX QA, real synchronized lyrics visible, Performance ON | 76.30 | 36.80 | 0.136% | 1–1 | 32.47 |
-| HEX QA, real synchronized lyrics visible, Performance OFF | 77.12 | 37.34 | 0.717% | 1–1 | 32.50 |
-| HEX QA, repeated skips/history replay, Performance OFF, Discord ON | 76.54 | 36.71 | 1.059% | 1–1 | 32.45 |
+The min-on/min-off and rpc-on cases start hidden in the tray through the existing --minimized option. Separate window-min cases use actual Windows minimization. Basic Home/tray/RPC comparisons use the unmodified public executables. Lyrics, queue, Now Playing and native minimized comparisons use retained instrumented reference builds, not the unmodified public executables. The Discord client was absent: enabled/disconnected overhead was measured, while connected-client performance and a real button acknowledgment remain unverified.
 
-The QA-only perf-harness feature invokes the real app callbacks and records events/frames/allocations. It is absent from the public executable. These rows therefore describe an instrumented optimized build, not exact shipped-binary costs. Lyrics used a live catalog album recording and LRCLIB reported an exact synchronized match in both modes. The data was line-timed; no live word-timed result is claimed. Separate live runs also exercised the genuine plain-lyrics fallback. The queue run completed four next-track operations and four historical-entry replays, confirmed by actual audio-start events, without a permanent child process.
+Initial lyrics samples with an unsupported baseline QA command were excluded and rerun without seeking on both builds. Two Explore setup samples were also excluded and rerun. All 29 final samples passed audio-clock and applicable QA-step validation. Genuine source-provided line synchronization was present in the lyrics workloads; no synthetic word timing was used.
 
-The public executable SHA-256 is **b6b27d5ab2edd99555f033d3c8ff77e13af2ca24e8babc80dcdba2279edc0e2a**. The QA executable SHA-256 is **7389cd289feaa4057bd1ff7e33612b6c4fb4a0b9a04feb940aa22d7b88314708**. These checks preserve the native Rust/Slint architecture; they are not a long-duration leak test or a measurement on every Windows machine.
+Executable SHA256 identities:
+
+- 0.2.0 public: B6B27D5AB2EDD99555F033D3C8FF77E13AF2CA24E8BABC80DCDBA2279EDC0E2A
+- 0.2.0 instrumented reference: 7389CD289FEAA4057BD1FF7E33612B6C4FB4A0B9A04FEB940AA22D7B88314708
+- 0.3.0 public: F2D77961F594A69311D90A64EA6B4A978A4A9F1FCE0CA002D7793D009401C032
+- 0.3.0 instrumented reference: EFBCEC70B2B4DBDCB78F39C662F94708CA8D7B96169A1BDA899C669F8BC28DA9
+
+Reproduction: scripts/Benchmark-SableMatrix.ps1. Raw profiles and logs remain private and are not distributed.
