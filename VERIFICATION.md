@@ -33,3 +33,13 @@ Discord's existing local IPC architecture and Application ID 1570159402856751135
 Manual Developer Portal work remains: rename the application to HEX and upload the supplied 1024 × 1024 hex.png under asset key hex. The name is server-managed; keeping the existing Application ID preserves the integration. Song/art click-through URLs remain omitted. Ordinary activity privacy preferences are not changed.
 
 The installer is unsigned. Windows security and reputation protections are not bypassed. Automatic application installation remains gated on HEX-controlled signing keys; application updates currently use the official release page manually.
+
+## Publication verification, 11 November 2026
+
+HEX 0.2.0 was published at https://github.com/subliminalsidkthemeaning/HEX/releases/tag/v0.2.0 . An anonymous full download of https://github.com/subliminalsidkthemeaning/HEX/releases/latest/download/HEX-Setup-x64.exe returned HTTP 200 and matched the packaged SHA-256 **563ab1a23d9faea20c371c34ad53da1eb5edfb5c9ae61d80afef30185bac3642**. The app's live public-URL verification test passed separately (1/1).
+
+The public, uninstrumented executable received Discord's successful SET_ACTIVITY acknowledgment with matching nonce **2**. Its accepted outgoing payload includes exactly one button, **Download HEX**, pointing to that verified installer URL. Artwork, real title/artist, Listening type and timeline remain. No details_url, state_url, large_url or small_url song click-through fields are present. This verifies payload acceptance; a second-viewer click has not been performed. A separate live optimized-QA run also paused, resumed, skipped, exited through the real app callback, and received an acknowledged presence clear. The QA process exited on its own; its development instrumentation is absent from the public executable.
+
+Across the full run and corrected/added regression runs, 1,554 unique automated cases passed, including the new manual-lyrics case and live public-URL case. The full-run/targeted-run breakdown above is retained for transparency; the remaining 85 configuration-gated/ignored cases were not claimed as passes. Installer CLI checks and real streaming/Discord checks are additional evidence.
+
+Manual work remains the Developer Portal name/art update, a second-viewer button click, and live interactive installer artwork review at all three Windows display scales. Release binaries remain unchanged after publication; this repository document contains the post-publication checks.
