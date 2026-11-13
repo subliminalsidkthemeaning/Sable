@@ -22,3 +22,5 @@ The process filename SableMusic.exe avoids the previous generic HEX.exe game-det
 Official documentation: https://docs.discord.com/developers/topics/rpc and https://docs.discord.com/developers/discord-social-sdk/development-guides/setting-rich-presence
 
 The published 0.3.0 installer passed anonymous full-file checksum verification and the application’s own bounded HTTPS/MZ verifier. A new live Discord acknowledgment and second-viewer button check were unavailable because no Discord client was running during this release verification.
+
+Official Developer Portal artwork: [sable.png](https://raw.githubusercontent.com/subliminalsidkthemeaning/Sable/main/assets/discord/sable.png).
